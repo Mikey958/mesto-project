@@ -83,6 +83,40 @@ profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 // @todo: Функция создания карточки
 
+const cardForm = cardPopup.querySelector('.popup__form');
+const cardTitleInput = cardForm.querySelector('.popup__input_type_card-name');
+const cardImageInput = cardForm.querySelector('.popup__input_type_url');
+
+const createCardBtn = document.querySelector('.profile__add-button');
+
+const openCardPopup = () => {
+  cardTitleInput.value = '';
+  cardImageInput.value = '';
+
+  openModal(cardPopup);
+}
+
+const handleCardFormSubmit = (evt) => {
+  evt.preventDefault();
+
+  const newCardTitle =  cardTitleInput.value;
+  const newCardLink =  cardImageInput.value;
+
+  const newCardData = {
+    name: newCardTitle,
+    link: newCardLink,
+  }
+
+  const newCard = createCard(newCardData);
+
+  cardList.prepend(newCard);
+
+  closeModal(cardPopup);
+}
+
+createCardBtn.addEventListener('click', openCardPopup);
+cardForm.addEventListener('submit', handleCardFormSubmit);
+
 // @todo: Функция удаления карточки
 
 // @todo: Вывести карточки на страницу
