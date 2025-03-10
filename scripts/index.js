@@ -6,6 +6,8 @@ const cardTemplate = document.querySelector("#card-template").content;
 const profilePopup = document.querySelector(".popup_type_edit");
 const cardPopup = document.querySelector(".popup_type_new-card");
 const imagePopup = document.querySelector(".popup_type_image");
+const cardPopupImage = imagePopup.querySelector(".popup__image");
+const cardPopupName = imagePopup.querySelector(".popup__caption");
 
 // @todo: Темплейт карточки
 
@@ -29,6 +31,13 @@ const createCard = (cardData) => {
     deleteButton.closest(".places__item").remove();
   });
 
+  cardImage.addEventListener("click", () => {
+    openModal(imagePopup);
+    cardPopupImage.src = cardData.link;
+    cardPopupName.alt = cardData.name;
+    cardPopupName.textContent = cardData.name;
+  });
+
   return card;
 };
 
@@ -44,6 +53,7 @@ renderCards();
 // @todo: DOM узлы
 
 const openModal = (popup) => {
+  popup.classList.add("popup_is-animated");
   popup.classList.add("popup_is-opened");
 };
 
