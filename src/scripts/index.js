@@ -1,3 +1,15 @@
+// import "../pages/index.css";
+// import addIcon from "../images/add-icon.svg";
+// import avatar from "../images/avatar.jpg";
+// import card_1 from "../images/card_1.jpg";
+// import card_2 from "../images/card_2.jpg";
+// import card_3 from "../images/card_3.jpg";
+// import close from "../images/close.svg";
+// import deleteIcon from "../images/delete-icon.svg";
+// import editIcon from "../images/edit-icon.svg";
+// import likeActive from "../images/like-active.svg";
+// import likeInactive from "../images/like-inactive.svg";
+// import logo from "../images/logo.svg";
 import { initialCards } from "./cards.js";
 
 const cardList = document.querySelector(".places__list");
@@ -9,7 +21,19 @@ const imagePopup = document.querySelector(".popup_type_image");
 const cardPopupImage = imagePopup.querySelector(".popup__image");
 const cardPopupName = imagePopup.querySelector(".popup__caption");
 
-// @todo: Темплейт карточки
+// const whoIsTheGoat = [
+//   { name: "addIcon", link: addIcon },
+//   { name: "avatar", link: avatar },
+//   { name: "card_1", link: card_1 },
+//   { name: "card_2", link: card_2 },
+//   { name: "card_3", link: card_3 },
+//   { name: "close", link: close },
+//   { name: "deleteIcon", link: deleteIcon },
+//   { name: "editIcon", link: editIcon },
+//   { name: "likeActive", link: likeActive },
+//   { name: "likeInactive", link: likeInactive },
+//   { name: "logo", link: logo },
+// ];
 
 const createCard = (cardData) => {
   const card = cardTemplate.querySelector(".places__item").cloneNode(true);
@@ -34,7 +58,7 @@ const createCard = (cardData) => {
   cardImage.addEventListener("click", () => {
     openModal(imagePopup);
     cardPopupImage.src = cardData.link;
-    cardPopupName.alt = cardData.name;
+    cardPopupImage.alt = cardData.name;
     cardPopupName.textContent = cardData.name;
   });
 
@@ -50,15 +74,32 @@ const renderCards = () => {
 
 renderCards();
 
-// @todo: DOM узлы
+function closeByEsc(evt) {
+  if (evt.key === "Escape") {
+    const openedModal = document.querySelector(".popup_is-opened");
+    if (openedModal) {
+      closeModal(openedModal);
+    }
+  }
+}
+
+document.querySelectorAll(".popup").forEach((popup) => {
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      closeModal(popup);
+    }
+  });
+});
 
 const openModal = (popup) => {
   popup.classList.add("popup_is-animated");
   popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closeByEsc);
 };
 
 const closeModal = (popup) => {
   popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", closeByEsc);
 };
 
 const closeButtons = document.querySelectorAll(".popup__close");
@@ -103,8 +144,6 @@ const handleProfileFormSubmit = (evt) => {
 editProfileBtn.addEventListener("click", openProfilePopup);
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-// @todo: Функция создания карточки
-
 const cardForm = cardPopup.querySelector(".popup__form");
 const cardTitleInput = cardForm.querySelector(".popup__input_type_card-name");
 const cardImageInput = cardForm.querySelector(".popup__input_type_url");
@@ -139,6 +178,63 @@ const handleCardFormSubmit = (evt) => {
 createCardBtn.addEventListener("click", openCardPopup);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 
-// @todo: Функция удаления карточки
+const showInputError = (formElement, inputElement, errorMessage) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add("popup__input_type_active");
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add("popup__input-error_active");
+};
 
-// @todo: Вывести карточки на страницу
+const hideInputError = (formElement, inputElement) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove("popup__input_type_active");
+  errorElement.classList.remove("popup__input-error_active");
+  errorElement.textContent = "";
+};
+
+const hasInvalidInput = (inputList) => {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+};
+
+const toggleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add("popup__button_inactive");
+  } else {
+    buttonElement.classList.remove("popup__button_inactive");
+  }
+};
+
+const checkInputValidity = (formElement, inputElement) => {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(formElement, inputElement);
+  }
+};
+
+const setEventListeners = (formElement) => {
+  const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
+  const buttonElement = formElement.querySelector(".popup__button");
+
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener("input", () => {
+      checkInputValidity(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+};
+
+const enableValidation = () => {
+  const formList = Array.from(document.querySelectorAll(".popup__form"));
+  formList.forEach((formElement) => {
+    formElement.addEventListener("submit", (e) => {
+      e.preventDefault();
+    });
+
+    setEventListeners(formElement);
+  });
+};
+
+enableValidation();
