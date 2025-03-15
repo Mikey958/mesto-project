@@ -8,7 +8,7 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mesto</title>
-<!--    <link rel="stylesheet" href="pages/index.css" />-->
+    <!--    <link rel="stylesheet" href="pages/index.css" />-->
   </head>
   <body class="page">
     <div class="page__content">
@@ -23,12 +23,14 @@
         <section class="profile page__section">
           <div
             class="profile__image"
-            style="background-image: url('./images/avatar.jpg')"
-          ></div>
+            style="background-image: url(&quot;./images/avatar.jpg&quot;)"
+          >
+            <div class="profile__image_glass"></div>
+          </div>
           <div class="profile__info">
-            <h1 class="profile__title">Жак-Ив Кусто</h1>
+            <h1 class="profile__title"></h1>
             <button class="profile__edit-button" type="button"></button>
-            <p class="profile__description">Исследователь океана</p>
+            <p class="profile__description"></p>
           </div>
           <button class="profile__add-button" type="button"></button>
         </section>
@@ -39,6 +41,27 @@
       <footer class="footer page__section">
         <p class="footer__copyright">© 2021 Mesto Russia</p>
       </footer>
+      <div class="popup popup_type_edit-avatar">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="edit-avatar">
+            <input
+              type="text"
+              name="avatar"
+              id="avatar-input"
+              class="popup__input popup__input_type_avatar"
+              placeholder="Ссылка на аватар"
+              required
+              pattern="https?://(?:[\w-]+\.)+[\w-]+(?:/[\w\-.~!*'();:@&=+$,/?%#[\]]*)*(\.(jpg|jpeg|png|gif|webp|svg|bmp|tiff))($|\?)"
+            />
+            <span class="popup__input-error avatar-input-error"></span>
+            <button type="submit" class="button popup__button">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
       <div class="popup popup_type_edit">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -95,8 +118,7 @@
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
-              pattern="/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
-"
+              pattern="https?://(?:[\w-]+\.)+[\w-]+(?:/[\w\-.~!*'();:@&=+$,/?%#[\]]*)*(\.(jpg|jpeg|png|gif|webp|svg|bmp|tiff))($|\?)"
             />
             <span class="popup__input-error card-url-input-error"></span>
             <button type="submit" class="button popup__button">
@@ -113,8 +135,8 @@
         </div>
       </div>
     </div>
-<!--    <script type="module" src="scripts/cards.js"></script>-->
-<!--    <script type="module" src="scripts/index.js" defer></script>-->
+    <!--    <script type="module" src="scripts/cards.js"></script>-->
+    <!--    <script type="module" src="scripts/index.js" defer></script>-->
 
     <template id="card-template">
       <li class="places__item card">
@@ -122,7 +144,10 @@
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
+          <div class="card__like-container">
+            <button type="button" class="card__like-button"></button>
+            <p class="card__likes-count"></p>
+          </div>
         </div>
       </li>
     </template>
